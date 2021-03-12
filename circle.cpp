@@ -13,6 +13,14 @@ struct ctzn{
 };
 
 template <typename T>
+
+bool operator!=(T first, T second) {
+    if(first.fio == second.fio) {
+        if ((first.pol.st == second.pol.st) && (first.pol.house == second.pol.house) && (first.pol.flat == second.pol.flat) && (first.gender == second.gender) && (first.age == second.age));
+    }
+}
+
+template <typename T>
 struct Node
 {
     T information;
@@ -48,8 +56,8 @@ void destructor (Circle<T>& circle) { // очистка памяти
 
 template <typename T>
 unsigned int size (Circle<T>& circle) {
-   int size = circle.size;
-   return size;
+    int size = circle.size;
+    return size;
 }
 
 template <typename T>
@@ -202,7 +210,7 @@ T value_from_index(Circle<T>& circle, int index) {
 }
 
 template <typename T>
-T find(Circle<T>& circle, T value) {
+int find(Circle<T>& circle, T value) {
     int index = 0;
     Node<T>* element = circle.begin;
     while (element -> information != value) {
@@ -224,7 +232,7 @@ void print (Circle<T>& circle) {
     std::cout << std::endl;
 }
 
-std::ostream& operator << (std::ostream& output, ctzn& citizen) {
+std::ostream& operator << (std::ostream& output,const ctzn& citizen) {
     output << "Full name: " << citizen.fio << "\nStreet, house and flat: " << citizen.pol.st << ',' << citizen.pol.house << ',' << citizen.pol.flat << "\nGender: " << citizen.gender << "\nAge: "<< citizen.age <<std::endl << std::endl;
     return output;
 }
@@ -338,7 +346,7 @@ int main() {
     push_begin(circle1, ctzn5);
     push_begin(circle1, ctzn6);
     push_begin(circle1, ctzn7);
-    std::cout << "At what position ca we meet Voloshchenko Ivan and information about him: "<< std::endl;
+    std::cout << "At what position can we meet Voloshchenko Ivan: "<< std::endl;
     std::cout << find (circle1, ctzn1);
-        return 0;
+    return 0;
 }
