@@ -40,6 +40,7 @@ template <typename T, int size>
 void destructor(Line<T,size>& line) {
     for (int i = 0; i < size; i++) {
         line.array[i] = 0;
+        line.act_size--;
     }
     cout << "Job is finished, memory is cleared." << endl;
 }
@@ -102,11 +103,12 @@ T pop_end (Line<T,size>& line) {
 template <typename T, int size>
 
 T pop_index (Line<T,size>& line, int index) {
-    T element = line.array[index - 1];
-    for (int i = index + 1; i < line.act_size; i++)
-        line.array[i - 1] = line.array[i];
-    line.act_size--;
-    line.array[line.act_size] = 0;
+        T element = line.array[index - 1];
+        for (int i = index + 1; i < line.act_size; i++)
+            line.array[i - 1] = line.array[i];
+        line.act_size--;
+        line.array[line.act_size] = 0;
+    return element;
 }
 
 template <typename T, int size>
@@ -118,10 +120,12 @@ T value_from_index (Line<T,size>& line, int index) {
 template <typename T, int size>
 
 int find (Line<T,size>& line, T information) {
-    for (int i = 0; i< line.act_size; i++) {
-        if (line.array[i] == information)
-            return i;
+    int k = -1;
+    for (int i = 0; i < line.act_size; i++) {
+        if (information == line.array[i])
+            k = i;
     }
+    return k;
 }
 
 template <typename T, int size>
@@ -184,7 +188,10 @@ int main() {
     cout << "Value from index 4 is: " << value_from_index(line,4);
     cout << endl;
 
-    cout << "Index of number 3 is: " << find(line, 3) << endl;
+    if (find(line,3) == -1)
+        cout << "There are no same elements in the array" << endl;
+    else
+        cout << "Index of number 3 is: " << find(line, 3) << endl;
 
     destructor(line);
     cout << endl << endl;
@@ -215,20 +222,20 @@ int main() {
     cout << "Popped person from the beginning: " << pop_begin(line1) << endl;
     cout << "Popped person from the end: " << pop_end(line1) << endl;
 
-    push_end(line1,ctzn6);
-    push_end(line1, ctzn7);
-    cout << "We'll add some people to make array look better: ";
-    print(line1);
-    cout << endl;
+     push_end(line1,ctzn6);
+     push_end(line1, ctzn7);
+     cout << "We'll add some people to make array look better: " << endl;
+     print(line1);
+     cout << endl;
 
-    pop_index(line1,3);
-    cout << "Array with popped person from index 3: ";
-    print(line);
+    cout << "Popped person from index 1: " << endl << pop_index(line1, 1);
     cout << endl;
 
     cout << "Person from index 1: " << value_from_index(line1, 1) << endl;
 
-    cout << "Index of person number 7 is: " << find(line1, ctzn7) << endl;
+    cout << "Index of person number 6 is: " << find(line1, ctzn6) << endl;
+
+    destructor(line1);
 
     return 0;
 }
