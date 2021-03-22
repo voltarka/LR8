@@ -1,22 +1,19 @@
 #include <iostream>
+using namespace std;
 
-struct adress {
-    std::string st;
-    int house;
-    int flat;
-};
-struct ctzn{
+struct ctzn {
     std::string fio; // snp
-    adress pol; // place of living
     char gender;
     int age;
 };
+
+
 
 template <typename T>
 
 bool operator!=(T first, T second) {
     if(first.fio == second.fio) {
-        if ((first.pol.st == second.pol.st) && (first.pol.house == second.pol.house) && (first.pol.flat == second.pol.flat) && (first.gender == second.gender) && (first.age == second.age));
+        if ((first.gender == second.gender) && (first.age == second.age));
     }
 }
 
@@ -63,7 +60,7 @@ unsigned int size (Circle<T>& circle) {
 template <typename T>
 void push_begin (Circle<T>& circle, T information) {
     circle.size ++;
-    Node<T>* element = new Node<T>;
+    auto element = new Node<T>;
     element->information = information; // создаем и инициализируем новый элемент (выделяем память)
     if (circle.begin == nullptr) { // если мы таким образом вставляем в список первый элемент, то нужно
         circle.begin = element;       // связать его с самим собой, так как у нас кольцевой список
@@ -84,13 +81,13 @@ void push_begin (Circle<T>& circle, T information) {
 template <typename T>
 void push_end (Circle<T>& circle, T information) {
     circle.size ++;
-    Node<T>* element = new Node<T>;
-    element -> information = information;
+    auto element = new Node<T>;
+    element->information = information;
     if (circle.begin == nullptr) {
         circle.end = element;
         circle.begin = element;
-        element -> next = element;
-        element -> previous = element;
+        element->next = element;
+        element->previous = element;
     }
     else {
         circle.end->next = element;
@@ -116,7 +113,7 @@ void push_index (Circle<T>& circle, T information, int index) {
             additional = additional -> next;
             count ++;
         }
-        Node<T>* element = new Node<T>;
+        auto element = new Node<T>;
         element->information = information;
         element->previous = additional;
         additional->next->previous = element;
@@ -128,7 +125,7 @@ void push_index (Circle<T>& circle, T information, int index) {
 template <typename T>
 void push_pointer (Circle<T>& circle, T information, Node<T>* pointer) {
     circle.size++;
-    Node<T>* element = new Node<T>;
+    auto element = new Node<T>;
     element->information = information;
     element->previous = pointer;             // связываем элемент с тем, на который был передан указатель
     element->next = pointer->next;           // связываем элемент со следующим
@@ -138,6 +135,11 @@ void push_pointer (Circle<T>& circle, T information, Node<T>* pointer) {
 
 template <typename T>
 T pop_begin (Circle<T>& circle) {
+    if (circle.size == 0) {
+        cout << "Circle is empty" << endl;
+        T exit;
+        return exit;
+    }
     circle.size --;
     Node<T>* used = circle.begin;
     T popped = circle.begin -> information;
@@ -150,6 +152,11 @@ T pop_begin (Circle<T>& circle) {
 
 template <typename T>
 T pop_end (Circle<T>& circle) {
+    if (circle.size == 0) {
+        cout << "Circle is empty" << endl;
+        T exit;
+        return exit;
+    }
     circle.size --;
     Node<T>* used = circle.end;
     T popped = circle.end -> information;
@@ -162,6 +169,11 @@ T pop_end (Circle<T>& circle) {
 
 template <typename T>
 T pop_index (Circle<T>& circle, int index) {
+    if (circle.size == 0) {
+        cout << "Circle is empty" << endl;
+        T exit;
+        return exit;
+    }
     if (index == 0)
         pop_begin (circle);
     else if (index == circle.size)
@@ -185,6 +197,11 @@ T pop_index (Circle<T>& circle, int index) {
 
 template <typename T>
 T pop_pointer (Circle<T>& circle, Node<T>* pointer) {
+    if (circle.size == 0) {
+        cout << "Circle is empty" << endl;
+        T exit;
+        return exit;
+    }
     circle.size --;
     Node<T>* element = circle.begin;
     while (element != pointer)
@@ -213,9 +230,11 @@ template <typename T>
 int find(Circle<T>& circle, T value) {
     int index = 0;
     Node<T>* element = circle.begin;
-    while (element -> information != value) {
+     while (element -> information != value) {
         index++;
         element = element -> next;
+         if (index == circle.size)
+             return -1;
     }
     return index;
 }
@@ -233,7 +252,7 @@ void print (Circle<T>& circle) {
 }
 
 std::ostream& operator << (std::ostream& output,const ctzn& citizen) {
-    output << "Full name: " << citizen.fio << "\nStreet, house and flat: " << citizen.pol.st << ',' << citizen.pol.house << ',' << citizen.pol.flat << "\nGender: " << citizen.gender << "\nAge: "<< citizen.age <<std::endl << std::endl;
+    output << "Full name: " << citizen.fio << "\nGender: " << citizen.gender << "\nAge: "<< citizen.age <<std::endl << std::endl;
     return output;
 }
 int main() {
@@ -257,43 +276,50 @@ int main() {
     print(circle);
     std::cout << "Size of circle is: " << size (circle) << std::endl;
 
-    std::cout << "Circle with popped element from the beginning: ";
-    pop_begin(circle);
+    std::cout << endl;
+    cout << "Popped element from the beginning is: " << pop_begin(circle) << endl;
     print(circle);
+    cout << endl;
 
-    std::cout << "Circle with popped element from the end: ";
-    pop_end(circle);
+    cout << "Popped  element from the end is: "<< pop_end(circle) << endl;
     print(circle);
+    cout << endl;
 
-    pop_index(circle, 7);
-    std::cout << "Circle with popped element from index 7: ";
+    std::cout << "Popped element from index 7: " << pop_index(circle, 7) << endl;
     print(circle);
+    cout << endl;
 
     Node<int>* pointer = circle.begin->previous;
-    pop_pointer(circle,pointer);
-    std::cout << "Circle with popped element using pointer at the last element: ";
+    std::cout << "Popped element using pointer at the last element: " << pop_pointer(circle,pointer) << endl;
     print(circle);
+    cout << endl;
 
     std::cout << "Value from index 2: ";
     std::cout << value_from_index(circle,2);
     std::cout << std::endl;
 
+
+    int k = find(circle, 9);
+    if (k == -1) {
+        cout << "There is no element that u've chosen"<< endl;
+    }
     std::cout << "Index when we meet 6 at the first time: ";
     std::cout << find(circle, 6);
     std::cout << std::endl;
+
     destructor(circle);
     std::cout << std::endl;
     std::cout << std::endl;
 
     std::cout << "Now let's do the same but with the structure Citizen"<< std::endl;
 
-    ctzn ctzn1 = {"Voloshchenko Ivan Sergeevich", "Baumanskaya", 14, 13, 'm', 18};
-    ctzn ctzn2 = {"Shapovalov Alexey Dmitrievich", "Adler", 1337, 88, 'f', 24};
-    ctzn ctzn3 = {"Kashapov Albert Ildarovich", "Adler", 1337, 55, 'm', 19};
-    ctzn ctzn4 = {"Milchenko Ivan Dmitrievich", "Stromynka", 23, 34, 'm', 18};
-    ctzn ctzn5 = {"Kolesnik Daniil Daniilovich", "Krasnoselskaya", 5, 109, 'm', 20};
-    ctzn ctzn6 = {"Nikiforov Zakhar Alexeevich", "Novogireevo", 66,19,'m',18};
-    ctzn ctzn7 = {"Khartulyari Gog Dmitrievich", "Sokolniki", 4, 47, 'm', 18};
+    ctzn ctzn1 = {"Voloshchenko Ivan Sergeevich",'m', 18};
+    ctzn ctzn2 = {"Shapovalov Alexey Dmitrievich",'f', 24};
+    ctzn ctzn3 = { "Kashapov Albert Ildarovich",'m', 19};
+    ctzn ctzn4 = {"Milchenko Ivan Dmitrievich", 'm', 18};
+    ctzn ctzn5 = {"Kolesnik Daniil Daniilovich",'m', 20};
+    ctzn ctzn6 = {"Nikiforov Zakhar Alexeevich",'m',18};
+    ctzn ctzn7 = {"Khartulyari Gog Dmitrievich",'m', 18};
 
     Circle<ctzn> circle1;
     constructor (circle1);
@@ -321,21 +347,22 @@ int main() {
     std::cout << "Size of circle: " << size(circle1) << std::endl;
 
     pop_begin(circle1);
-    std::cout << "Circle with popped person from the beginning: " << std::endl;
+    std::cout << "Popped person from the beginning: " << std::endl;
     print(circle1);
+    cout << endl;
 
-    pop_end(circle1);
-    std::cout << "Circle with popped person from the end"<< std::endl;
+    std::cout << "Popped person from the end"<< pop_end(circle1) <<std::endl;
     print(circle1);
+    cout << endl;
 
-    pop_index(circle1, 2);
-    std::cout << "Circle with popped person with index 2:" << std::endl;
+    std::cout << "Popped person with index 2:" <<pop_index(circle1, 2) << std::endl;
     print(circle1);
+    cout << endl;
 
     Node<ctzn>* person = circle1.begin->previous;
-    pop_pointer(circle1,person);
-    std::cout << "Circle with popped person using pointer at the last element: "<< std::endl;
+    std::cout << "Popped person using pointer at the last element: "<<pop_pointer(circle1,person) << std::endl;
     print(circle1);
+    cout << endl;
 
     std::cout << "Person from index 1" << std::endl;
     std::cout << value_from_index(circle1, 1);
@@ -347,6 +374,9 @@ int main() {
     push_begin(circle1, ctzn6);
     push_begin(circle1, ctzn7);
     std::cout << "At what position can we meet Voloshchenko Ivan: "<< std::endl;
+    int a = find (circle1, ctzn7);
+    if (a == -1)
+        cout << "There is no person that u've chosen" << endl;
     std::cout << find (circle1, ctzn1);
     return 0;
 }
