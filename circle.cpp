@@ -106,7 +106,6 @@ void push_index (Circle<T>& circle, T information, int index) {
     else if (index == circle.size)
         push_end(circle, information);
     else {
-        circle.size++;
         Node<T>* additional = circle.begin;
         while (count != index - 1)
         {
@@ -120,6 +119,7 @@ void push_index (Circle<T>& circle, T information, int index) {
         element->next = additional->next;
         additional->next = element;
     }
+            circle.size++;
 }
 
 template <typename T>
