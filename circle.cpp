@@ -7,8 +7,6 @@ struct ctzn {
     int age;
 };
 
-
-
 template <typename T>
 
 bool operator!=(T first, T second) {
@@ -106,6 +104,7 @@ void push_index (Circle<T>& circle, T information, int index) {
     else if (index == circle.size)
         push_end(circle, information);
     else {
+        circle.size++;
         Node<T>* additional = circle.begin;
         while (count != index - 1)
         {
@@ -119,7 +118,6 @@ void push_index (Circle<T>& circle, T information, int index) {
         element->next = additional->next;
         additional->next = element;
     }
-            circle.size++;
 }
 
 template <typename T>
@@ -285,7 +283,7 @@ int main() {
     print(circle);
     cout << endl;
 
-    std::cout << "Popped element from index 7: " << pop_index(circle, 7) << endl;
+    std::cout << "Popped element from index 7: " << pop_index(circle,7) << endl;
     print(circle);
     cout << endl;
 
